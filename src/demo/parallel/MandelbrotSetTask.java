@@ -346,37 +346,14 @@ class MandelbrotSetTask extends Task<Long> {
     static final Color[] colors = new Color[256];
 
     static {
-        
-        /**
-         * Color stops for colors table: color values
-         */
-        Color[] cc = {
-            Color.rgb(40, 0, 0),
-            Color.RED,
-            Color.WHITE,
-            Color.RED,
-            Color.rgb(100, 0, 0),
-            Color.RED,
-            Color.rgb(50, 0, 0)
-        };
-        
-        /**
-         * Color stops for colors table: relative position in the table
-         */
-        double[] cp = {
-            0, 0.17, 0.25, 0.30, 0.5, 0.75, 1,};
-        
-        /**
-         * Color table population
-         */
-        int j = 0;
+        // HSB-палитра с плавным переходом от синего к жёлто-жаркому
         for (int i = 0; i < colors.length; i++) {
-            double p = (double) i / (colors.length - 1);
-            if (p > cp[j + 1]) {
-                j++;
-            }
-            double val = (p - cp[j]) / (cp[j + 1] - cp[j]);
-            colors[i] = cc[j].interpolate(cc[j + 1], val);
+            double t = i / (double) (colors.length - 1); // 0..1
+            double hue = 250.0 - 250.0 * t;              // 250°→0° (сине-фиолетовый → красный)
+            double sat = 0.90;                           // насыщенность
+            double bri = 0.25 + 0.75 * t;                // яркость растёт к краю
+            colors[i] = Color.hsb(hue, sat, bri);
         }
     }
+
 }
