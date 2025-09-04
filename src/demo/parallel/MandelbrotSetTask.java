@@ -271,15 +271,19 @@ class MandelbrotSetTask extends Task<Long> {
      * @param comp a complex number used for calculation
      * @return number of iterations a value stayed within a given disk.
      */
-    private int calc(Complex comp) {
+    int calc(Complex comp) {
         int count = 0;
         Complex c = new Complex(0, 0);
+
+        Complex comp2 = new Complex(0, 0).plus(comp).times(comp);
+
         do {
-            c = c.times(c).plus(comp);
+            c = c.times(c).plus(comp2);  // z_{n+1} = z_n^2 + c^2
             count++;
         } while (count < CAL_MAX_COUNT && c.lengthSQ() < LENGTH_BOUNDARY);
         return count;
     }
+
 
     /**
      * Calculates a color of a given pixel on the image using 
