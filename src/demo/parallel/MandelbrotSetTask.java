@@ -55,7 +55,7 @@ import javafx.scene.paint.Color;
  * @author Alexander Kouznetsov, Tristan Yan
  */
 class MandelbrotSetTask extends Task<Long> {
-    
+
     /**
      * Calculation times, deliberately choose it as 256 because we will use the
      * count to calculate Color
@@ -273,14 +273,23 @@ class MandelbrotSetTask extends Task<Long> {
      */
     int calc(Complex comp) {
         int count = 0;
-        Complex c = new Complex(0, 0);
-
-        Complex comp2 = new Complex(0, 0).plus(comp).times(comp);
+        Complex z = new Complex(0, 0);
 
         do {
-            c = c.times(c).plus(comp2);  // z_{n+1} = z_n^2 + c^2
+            // z^2
+            Complex z2 = z.copy().times(z);
+
+            // c / (|z|^2 + 1)
+            double denom = z.lengthSQ() + 1.0;
+            if (denom < 1e-14) denom = 1e-14;          // защита от нуля
+            Complex frac = comp.copy().times(1.0 / denom);
+
+            // z_{n+1} = z^2 + c / (|z|^2 + 1)
+            z = z2.plus(frac);
+
             count++;
-        } while (count < CAL_MAX_COUNT && c.lengthSQ() < LENGTH_BOUNDARY);
+        } while (count < CAL_MAX_COUNT && z.lengthSQ() < LENGTH_BOUNDARY);
+
         return count;
     }
 

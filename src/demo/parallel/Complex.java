@@ -85,6 +85,47 @@ public class Complex {
         return this;
     }
 
+    // 7c: вычитание (this = this - b)
+    public Complex minus(Complex b) {
+        re -= b.re;
+        im -= b.im;
+        return this;
+    }
+
+    // 7c: умножение на скаляр (this = k * this)
+    public Complex times(double k) {
+        re *= k;
+        im *= k;
+        return this;
+    }
+
+    // 7c: сопряжение (this = conj(this))
+    public Complex conjugate() {
+        im = -im;
+        return this;
+    }
+
+    // 7c: деление (this = this / b)
+    public Complex divide(Complex b) {
+        double d = b.re * b.re + b.im * b.im;
+        // чтобы не словить деление на ~0
+        if (d == 0.0) {
+            // оставим как есть (или можно чуть-чуть сдвинуть)
+            return this;
+        }
+        double real = (re * b.re + im * b.im) / d;
+        double imag = (im * b.re - re * b.im) / d;
+        re = real;
+        im = imag;
+        return this;
+    }
+
+    // 7c: удобная копия (немутирующий клон текущего значения)
+    public Complex copy() {
+        return new Complex(re, im);
+    }
+
+
     /**
      * Square of Complex object's length, we're using square of length to 
      * eliminate the computation of square root
